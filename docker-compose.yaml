@@ -67,41 +67,17 @@ services:
     depends_on:
       - 'db'
 
-  caddy_reverse_proxy:
-    image: caddy:latest
-    restart: always
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./certs:/etc/ssl/certs/custom
-      - ./private:/etc/ssl/private/custom
-      - caddy_data:/data
-      - caddy_config:/config
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - caddy_network
-    depends_on:
-      - web
-
-  dozzle:
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./dozzle:/data
-    ports:
-      - 8080:8080
-    environment:
-      DOZZLE_AUTH_PROVIDER: simple
-
 networks:
   caddy_network:
+    external: true
   kafka-net:
     driver: bridge
 
 volumes:
   caddy_data:
+    external: true
   caddy_config:
+    external: true
   pg_data:
    driver: local
   pgadmin-data:
