@@ -1,6 +1,6 @@
 aws ecr get-login-password --region $3 | docker login --username AWS --password-stdin $2
 
-docker build --build-arg APP_NAME=$1 --build-arg PORT=$4 --platform linux/amd64 -t $1 -f apps/$1/Dockerfile .
+docker build --platform linux/amd64 -t $1 --build-arg APP_NAME=$1 --build-arg PORT=$4 -f apps/$1/Dockerfile .
 
 docker tag $1:latest $2:latest
 
