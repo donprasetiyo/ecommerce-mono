@@ -40,12 +40,7 @@ export class PostgresClient {
             password: this.PASSWORD,
             database: this.DATABASE,
             port: this.PORT,
-            ssl:
-                // process.env.IS_PROD && process.env.IS_PROD.toString() === 'TRUE' && process.env.NODE_ENV === "production" ?
-                //     { rejectUnauthorized: false }
-                //     :
-                false
-            ,
+            ssl: false ,
             max: 10,
         });
 
@@ -90,7 +85,6 @@ export class PostgresClient {
     }
 
     public async getBillingHistory(userId: string, offset: number, limit: number, sortBy: string) {
-        //paypal order id and capture id ditaruh di mana ya??
         const start = performance.now()
         const query = this.db.selectFrom('Transaction as transaction')
             .leftJoin('Invoice as invoice', 'invoice.transaction_id', 'transaction.id')

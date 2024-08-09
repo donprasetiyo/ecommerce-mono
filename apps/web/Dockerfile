@@ -67,6 +67,6 @@ EXPOSE ${PORT}
 
 ENV PORT ${PORT}
 
-CMD HOSTNAME="0.0.0.0" node apps/${APP_NAME}/server.js
+CMD HOSTNAME="0.0.0.0" node apps/server.js
 
 # CMD ["./apps/web/migrateandstart.sh"]
