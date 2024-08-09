@@ -42,8 +42,8 @@ jobs:
           echo DB01_S3_CERT_SKIP_VERIFY=${{ secrets.DB01_S3_CERT_SKIP_VERIFY }} >> .env
           echo WEB_IMAGE_ECR=${{ secrets.WEB_IMAGE_ECR }} >> .env
           echo WEB_PORT=${{ secrets.WEB_PORT }} >> .env
-          echo WEB_BASE_URL=${{ secrets.WEB_BASE_URL }} >> .env
-          echo ADMIN_BASE_URL=${{ secrets.ADMIN_BASE_URL }} >> .env
+          echo WEB_BASE_URL=${{vars.WEB_BASE_URL}} >> .env
+          echo ADMIN_BASE_URL=${{ vars.ADMIN_BASE_URL }} >> .env
           cat .env
           cp .env apps/web/.env
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1
