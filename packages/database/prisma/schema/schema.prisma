@@ -1,0 +1,13 @@
+generator kysely {
+  provider        = "prisma-kysely"
+  output          = "../../../shared-types/src/database"
+  previewFeatures = ["prismaSchemaFolder"]
+  binaryTargets   = ["native"]
+  enumFileName    = "enums.ts"
+  fileName        = "types.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

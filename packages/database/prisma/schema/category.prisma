@@ -1,0 +1,26 @@
+model Category {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    description    String?
+    sub_categories SubCategory[]
+}
+
+model SubCategory {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    parent_id   BigInt
+    name        String?
+    description String?
+    category    Category  @relation(fields: [parent_id], references: [id])
+    products    Product[]
+
+    @@index([parent_id])
+}

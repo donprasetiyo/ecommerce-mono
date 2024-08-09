@@ -1,0 +1,15 @@
+model Entity {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    name String @db.VarChar(64)
+
+    value_datetime AttributeValueDatetime[]
+    value_text     AttributeValueText[]
+    value_decimal  AttributeValueDecimal[]
+    value_varchar  AttributeValueVarchar[]
+    value_int      AttributeValueInt[]
+}

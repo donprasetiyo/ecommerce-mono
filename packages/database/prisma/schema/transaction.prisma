@@ -1,0 +1,129 @@
+model Transaction {
+  id         BigInt   @id @unique @default(autoincrement())
+  public_id  String   @unique
+  amount     Decimal  @db.Decimal(15, 8)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  user_id String
+
+  transaction_status TransactionStatus
+  invoice            Invoice?
+  receipt            Receipt?
+  user               User              @relation(fields: [user_id], references: [id], onDelete: NoAction)
+
+  order_id BigInt      @unique
+  order    OrderDetail @relation(fields: [order_id], references: [id])
+
+  @@index([order_id])
+  @@index([user_id])
+}
+
+model Receipt {
+  id                      BigInt         @id @unique @default(autoincrement())
+  public_id               String         @unique
+  description             String?
+  created_at              DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  transaction_id          BigInt         @unique
+  customer_address_line_1 String?
+  customer_address_line_2 String?
+  customer_city           String?
+  customer_country        String?
+  customer_email          String?
+  customer_name           String?
+  customer_postal_code    String?
+  total                   Decimal        @db.Decimal(15, 8)
+  currency_code           String         @db.VarChar(3)
+  customer_id             String
+  paid_at                 DateTime       @db.Timestamptz(6)
+  number                  BigInt?        @unique @default(autoincrement())
+  payment_method          PaymentMethod?
+  currency                Currency       @relation(fields: [currency_code], references: [code], onUpdate: NoAction)
+  customer                User           @relation(fields: [customer_id], references: [id], onUpdate: NoAction)
+  transaction             Transaction    @relation(fields: [transaction_id], references: [id])
+  receipt_items           ReceiptItem?
+}
+
+model ReceiptItem {
+  id             BigInt     @id @unique @default(autoincrement())
+  public_id      String     @unique
+  created_at     DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
+  name           String
+  quantity       Int
+  unit_price     Decimal    @db.Decimal(15, 8)
+  receipt_id     BigInt     @unique
+  amount         Decimal    @db.Decimal(15, 8)
+  product_sku_id BigInt
+  vat_amount     Decimal?   @db.Decimal(15, 8)
+  vat_percentage Decimal?   @db.Decimal(15, 8)
+  product_id     BigInt
+  product_sku    ProductSKU @relation(fields: [product_sku_id], references: [id], onUpdate: NoAction)
+  receipt        Receipt    @relation(fields: [receipt_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product        Product    @relation(fields: [product_id], references: [id], onUpdate: NoAction)
+}
+
+model Invoice {
+  id                      BigInt         @id @unique @default(autoincrement())
+  public_id               String         @unique
+  description             String?
+  created_at              DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  transaction_id          BigInt         @unique
+  currency_code           String         @db.VarChar(3)
+  customer_address_line_1 String?
+  customer_address_line_2 String?
+  customer_city           String?
+  customer_country        String?
+  customer_email          String?
+  customer_id             String
+  customer_name           String?
+  customer_postal_code    String?
+  number                  BigInt         @unique @default(autoincrement())
+  total                   Decimal        @db.Decimal(15, 8)
+  due_date                DateTime       @db.Timestamptz(6)
+  invoice_date            DateTime       @db.Timestamptz(6)
+  paid_at                 DateTime?      @db.Timestamptz(6)
+  status                  InvoiceStatus  @default(UNPAID)
+  payment_method          PaymentMethod?
+  currency                Currency       @relation(fields: [currency_code], references: [code], onUpdate: NoAction)
+  customer                User           @relation(fields: [customer_id], references: [id], onUpdate: NoAction)
+  transaction             Transaction    @relation(fields: [transaction_id], references: [id])
+  invoice_items           InvoiceItem[]
+  payment_link            String
+}
+
+model InvoiceItem {
+  id             BigInt     @id @unique @default(autoincrement())
+  public_id      String     @unique
+  created_at     DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz(6)
+  name           String
+  quantity       Int
+  unit_price     Decimal    @db.Decimal(15, 8)
+  product_sku_id BigInt
+  product_id     BigInt
+  invoice_id     BigInt
+  amount         Decimal    @db.Decimal(15, 8)
+  vat_amount     Decimal?   @db.Decimal(15, 8)
+  vat_percentage Decimal?   @db.Decimal(15, 8)
+  invoice        Invoice    @relation(fields: [invoice_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product_sku    ProductSKU @relation(fields: [product_sku_id], references: [id], onUpdate: NoAction)
+  product        Product    @relation(fields: [product_id], references: [id], onUpdate: NoAction)
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  DRAFT
+}
+
+enum TransactionStatus {
+  PENDING
+  PAID
+}
+
+enum PaymentMethod {
+  PayPal
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@repo/features",
+  "version": "0.2.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "pnpm build --watch",
+    "test": "echo 'Add test script here'",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
+    "zod": "^3.23.8",
+    "kysely": "^0.27.3"
+  },
+  "devDependencies": {
+    "nanoid": "^5.0.7",
+    "@repo/logging": "workspace:^",
+    "@repo/trpc": "workspace:^",
+    "@repo/validators": "workspace:^",
+    "@repo/database": "workspace:^",
+
+    "@repo/eslint-config": "workspace:^",
+    
+    "@repo/typescript-config": "workspace:^",
+    "@repo/auth": "workspace:^",
+    "@repo/shared-types": "workspace:^",
+    "eslint": "^8.57.0",
+    "prettier": "^3.1.1",
+    "tsup": "^8.2.3",
+    "typescript": "^5.3.3"
+  },
+  
+  "prettier": "@repo/prettier-config"
+}

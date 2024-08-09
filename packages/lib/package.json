@@ -1,0 +1,38 @@
+{
+  "name": "@repo/lib",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "pnpm build --watch",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "devDependencies": {
+    "@repo/business-config": "workspace:*",
+    "@repo/shared-types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "^5.3.3",
+    "tsup": "^8.2.3"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "zod": "^3.23.8",
+    "kysely": "^0.27.3",
+    "currency.js": "^2.0.4"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@repo/eslint-config/base"
+    ]
+  },
+  
+  "prettier": "@repo/prettier-config"
+}

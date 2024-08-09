@@ -1,0 +1,109 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16.2
+    command: -c config_file=/etc/postgresql.conf
+    container_name: ecommerce-mono-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DATABASE: ${PG_DB}
+    ports: 
+      - "${PG_PORT}:${PG_PORT}"     
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./infra/postgres/custom.conf:/etc/postgresql.conf
+      - ./logs:/logs
+    networks:
+      - caddy_network
+
+  db-backup:
+    container_name: ecommerce-mono-db-backup
+    image: tiredofit/db-backup:4.0.35
+    volumes:
+      - ./backups:/backup
+    environment:
+      - TIMEZONE=Asia/Bangkok
+      - CONTAINER_NAME=ecommerce-mono-db-backup
+      - CONTAINER_ENABLE_MONITORING=FALSE
+      - DEBUG_MODE=FALSE
+
+      - BACKUP_JOB_CONCURRENCY=1
+      - DEFAULT_CHECKSUM=NONE       
+      - DEFAULT_COMPRESSION=ZSTD   
+      - DEFAULT_BACKUP_INTERVAL=60   
+      - DEFAULT_BACKUP_BEGIN=0000     
+      - DEFAULT_CLEANUP_TIME=1440  
+
+      - DB01_BACKUP_LOCATION=S3
+      - DB01_S3_KEY_ID=${DB01_S3_KEY_ID}
+      - DB01_S3_KEY_SECRET=${DB01_S3_KEY_SECRET}
+      - DB01_S3_BUCKET=${DB01_S3_BUCKET}
+      - DB01_S3_PATH=${DB01_S3_PATH}
+      - DB01_S3_REGION=${DB01_S3_REGION}
+      - DB01_S3_PROTOCOL=${DB01_S3_PROTOCOL}
+      - DB01_S3_CERT_SKIP_VERIFY=${DB01_S3_CERT_SKIP_VERIFY}
+      - DB01_TYPE=pgsql
+      - DB01_HOST=ecommerce-mono-db
+      - DB01_NAME=${PG_DB}
+      - DB01_USER=${PG_USER}
+      - DB01_PASS=${PG_PASSWORD}
+    restart: always
+    networks:
+      - caddy_network
+
+  web:
+    image: ${WEB_IMAGE_ECR}:latest
+    pull_policy: always
+    restart: always
+    networks:
+      - caddy_network
+    env_file:
+      - path: ./.env
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    depends_on:
+      - 'db'
+
+  caddy_reverse_proxy:
+    image: caddy:latest
+    restart: always
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./certs:/etc/ssl/certs/custom
+      - ./private:/etc/ssl/private/custom
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - caddy_network
+    depends_on:
+      - web
+
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./dozzle:/data
+    ports:
+      - 8080:8080
+    environment:
+      DOZZLE_AUTH_PROVIDER: simple
+
+networks:
+  caddy_network:
+  kafka-net:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pg_data:
+   driver: local
+  pgadmin-data:
+   driver: local
+

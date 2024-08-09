@@ -1,0 +1,6 @@
+model Session {
+  id         String   @id
+  expires_at DateTime @db.Timestamptz(6)
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}

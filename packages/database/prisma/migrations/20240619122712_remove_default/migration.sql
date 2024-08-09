@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "AIModel" ALTER COLUMN "icon" DROP DEFAULT;

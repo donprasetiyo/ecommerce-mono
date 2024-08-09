@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "GenerationMetadata" ALTER COLUMN "currency_code" DROP DEFAULT,
+ALTER COLUMN "fee_pertransaction" DROP DEFAULT,
+ALTER COLUMN "input" DROP DEFAULT,
+ALTER COLUMN "input_pertoken_price" DROP DEFAULT,
+ALTER COLUMN "input_token" DROP DEFAULT,
+ALTER COLUMN "input_token_price" DROP DEFAULT,
+ALTER COLUMN "net" DROP DEFAULT,
+ALTER COLUMN "output" DROP DEFAULT,
+ALTER COLUMN "output_pertoken_price" DROP DEFAULT,
+ALTER COLUMN "output_token" DROP DEFAULT,
+ALTER COLUMN "output_token_price" DROP DEFAULT,
+ALTER COLUMN "revenue" DROP DEFAULT,
+ALTER COLUMN "total_token" DROP DEFAULT,
+ALTER COLUMN "total_token_price" DROP DEFAULT;

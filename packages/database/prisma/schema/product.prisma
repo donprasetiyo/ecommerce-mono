@@ -1,0 +1,70 @@
+model Product {
+  id         BigInt    @id @unique @default(autoincrement())
+  public_id  String    @unique
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  name        String
+  description String
+
+  summary     String?
+  cover       String?
+  category_id BigInt?
+
+  category SubCategory? @relation(fields: [category_id], references: [id])
+
+  product_skus ProductSKU[]
+  cart_items   CartItem[]
+  order_items  OrderItem[]
+  wishlist     Wishlist[]
+  invoice_item InvoiceItem[]
+  receipt_item ReceiptItem[]
+
+  @@index([category_id])
+}
+
+model ProductAttribute {
+  id         BigInt    @id @unique @default(autoincrement())
+  public_id  String    @unique
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  product_sku_id BigInt
+  attribute_id   BigInt
+  value          String?
+
+  product_sku ProductSKU @relation(fields: [product_sku_id], references: [id])
+  attribute   Attribute  @relation(fields: [attribute_id], references: [id])
+
+  @@index([product_sku_id])
+  @@index([attribute_id])
+}
+
+model ProductSKU {
+  id         BigInt    @id @unique @default(autoincrement())
+  public_id  String    @unique
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+  deleted_at DateTime? @db.Timestamptz(6)
+
+  product_id BigInt
+  sku        String?
+  price      String?
+  quantity   Int?
+
+  product    Product            @relation(fields: [product_id], references: [id])
+  attributes ProductAttribute[]
+
+  cart_items  CartItem[]
+  order_items OrderItem[]
+
+  product_price ProductPrice[]
+
+  invoice_item InvoiceItem[]
+  receipt_item ReceiptItem[]
+  wishlist     Wishlist[]
+
+  @@index([product_id])
+}

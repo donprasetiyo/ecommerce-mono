@@ -1,0 +1,36 @@
+{
+  "name": "@repo/logging",
+  "version": "0.2.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "git clean -xdf .turbo node_modules",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "pnpm build --watch",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "pino": "^8.18.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:^",
+    
+    "@repo/typescript-config": "workspace:^",
+    "eslint": "^8.57.0",
+    "prettier": "^3.1.1",
+    "tsup": "^8.2.3",
+    "typescript": "^5.3.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@repo/eslint-config/base"
+    ]
+  },
+  
+  "prettier": "@repo/prettier-config"
+}

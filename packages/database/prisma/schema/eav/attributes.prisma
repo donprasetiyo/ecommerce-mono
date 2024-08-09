@@ -1,0 +1,92 @@
+model Attribute {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    name String @db.VarChar(64)
+
+    product_attributes ProductAttribute[]
+    metadata           Metadata[]
+    value_datetime     AttributeValueDatetime[]
+    value_text         AttributeValueText[]
+    value_decimal      AttributeValueDecimal[]
+    value_varchar      AttributeValueVarchar[]
+    value_int          AttributeValueInt[]
+}
+
+model AttributeValueDatetime {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    attribute_id BigInt
+    entity_id    BigInt
+    value        DateTime
+
+    attributes Attribute @relation(fields: [attribute_id], references: [id])
+    entities   Entity    @relation(fields: [entity_id], references: [id])
+}
+
+model AttributeValueText {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    attribute_id BigInt
+    entity_id    BigInt
+    value        String @db.Text
+
+    attributes Attribute @relation(fields: [attribute_id], references: [id])
+    entities   Entity    @relation(fields: [entity_id], references: [id])
+}
+
+model AttributeValueDecimal {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    attribute_id BigInt
+    entity_id    BigInt
+    value        Decimal @db.Decimal(15, 8)
+
+    attributes Attribute @relation(fields: [attribute_id], references: [id])
+    entities   Entity    @relation(fields: [entity_id], references: [id])
+}
+
+model AttributeValueVarchar {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    attribute_id BigInt
+    entity_id    BigInt
+    value        String @db.VarChar(255)
+
+    attributes Attribute @relation(fields: [attribute_id], references: [id])
+    entities   Entity    @relation(fields: [entity_id], references: [id])
+}
+
+model AttributeValueInt {
+    id         BigInt    @id @unique @default(autoincrement())
+    public_id  String    @unique
+    created_at DateTime  @default(now()) @db.Timestamptz(6)
+    updated_at DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+    deleted_at DateTime? @db.Timestamptz(6)
+
+    attribute_id BigInt
+    entity_id    BigInt
+    value        Int
+
+    attributes Attribute @relation(fields: [attribute_id], references: [id])
+    entities   Entity    @relation(fields: [entity_id], references: [id])
+}

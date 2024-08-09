@@ -1,0 +1,13 @@
+{
+  "extends": "@repo/typescript-config/nest.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "paths": {
+ "@repo/database/*": ["./src/*"]
+    },
+  },
+  "include": ["src", "@lucia-auth/adapter-postgresql"],
+  "exclude": ["node_modules", "build", "dist"]
+}

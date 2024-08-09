@@ -1,0 +1,40 @@
+enum UserStatus {
+  ACTIVE
+  DELETED
+}
+
+model User {
+  id             String     @id @unique
+  username       String     @unique
+  password_hash  String
+  email_verified Boolean
+  created_at     DateTime   @default(now()) @db.Timestamptz(6)
+  status         UserStatus @default(ACTIVE)
+  deleted_at     DateTime?  @db.Timestamptz(6)
+
+  currency_code String @default("USD")
+  email         String @unique
+
+  avatar     String?
+  first_name String?
+  last_name  String?
+
+  birth_of_date DateTime?
+  phone_number  String?
+
+  addresses    Address[]
+  wishlist     Wishlist[]
+  carts        Cart[]
+  orders       OrderDetail[]
+  transactions Transaction[]
+  sessions     Session[]
+  invoices     Invoice[]
+  receipts     Receipt[]
+
+  currency                Currency               @relation(fields: [currency_code], references: [code])
+  email_verification_code EmailVerificationCode?
+  password_reset_token    PasswordResetToken[]
+
+  role      Role   @relation(fields: [role_name], references: [name])
+  role_name String @default("regular")
+}

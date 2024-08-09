@@ -1,0 +1,58 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "prisma": {
+      "cache": false,
+      "persistent": true
+    },
+    "deploy": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": false
+    },
+    "build": {
+      "dependsOn": [
+        "//#package-deps",
+        "^build"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "!.next/standalone/node_modules"
+      ]
+    },
+    "lint": {
+      "dependsOn": [
+        "^lint"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "api#dev": {
+      "dependsOn": [
+        "build"
+      ],
+      "persistent": true
+    },
+    "//#package-deps": {
+      "inputs": [
+        "**/package.json",
+        ".npmrc",
+        ".npmignore",
+        "pnpm-workspace.yaml"
+      ],
+      "outputs": [
+        "pnpm-lock.yaml"
+      ]
+    }
+  }
+}

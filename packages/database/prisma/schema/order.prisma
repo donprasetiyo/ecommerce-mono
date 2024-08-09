@@ -1,0 +1,34 @@
+model OrderDetail {
+    id         BigInt   @id @unique @default(autoincrement())
+    public_id  String   @unique
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+    updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+    user_id        String
+    transaction_id BigInt
+    total          Int?
+    user           User         @relation(fields: [user_id], references: [id])
+    order_items    OrderItem[]
+    transaction    Transaction?
+
+    @@index([user_id])
+}
+
+model OrderItem {
+    id         BigInt   @id @unique @default(autoincrement())
+    public_id  String   @unique
+    created_at DateTime @default(now()) @db.Timestamptz(6)
+    updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+    order_id       BigInt
+    product_id     BigInt
+    product_sku_id BigInt
+    quantity       Int?
+    order          OrderDetail @relation(fields: [order_id], references: [id])
+    product        Product     @relation(fields: [product_id], references: [id])
+    product_sku    ProductSKU  @relation(fields: [product_sku_id], references: [id])
+
+    @@index([order_id])
+    @@index([product_id])
+    @@index([product_sku_id])
+}

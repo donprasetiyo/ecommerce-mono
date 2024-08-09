@@ -1,0 +1,49 @@
+name: Docker image build and publish
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActions
+          aws-region: us-east-1
+
+      - name: Build web image and push to ECR
+        shell: bash
+        run: |
+          touch .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          echo DATABASE_URL_PROD=${{ secrets.DATABASE_URL_PROD }} >> .env
+          echo PG_HOST=${{ secrets.PG_HOST }} >> .env
+          echo PG_HOST_PROD=${{ secrets.PG_HOST_PROD }} >> .env
+          echo PG_USER=${{ secrets.PG_USER }} >> .env
+          echo PG_PASSWORD=${{ secrets.PG_PASSWORD }} >> .env
+          echo PG_NAME=${{ secrets.PG_NAME }} >> .env
+          echo PG_PORT=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_KEY_ID=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_KEY_SECRET=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_BUCKET=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_PATH=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_REGION=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_PROTOCOL=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_CERT_SKIP_VERIFY=${{ secrets.PG_PORT }} >> .env
+          echo WEB_IMAGE_ECR=${{ secrets.PG_PORT }} >> .env
+          echo WEB_PORT=${{ secrets.PG_PORT }} >> .env
+          echo WEB_BASE_URL=${{ secrets.PG_PORT }} >> .env
+          echo ADMIN_BASE_URL=${{ secrets.PG_PORT }} >> .env
+          cat .env
+          cp .env apps/web/.env
+          bash ./apps/web/push-image.sh

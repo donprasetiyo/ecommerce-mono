@@ -1,0 +1,35 @@
+{
+  "name": "@repo/business-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "run-db": "bash ./run-dev-db.sh",
+    "clean": "git clean -xdf .turbo node_modules",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "pnpm build --watch",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "peerDependencies": {
+    "server-only": "^0.0.1",
+    "@types/node": "^20.14.12"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "^5.3.3",
+    "tsup": "^8.2.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@repo/eslint-config/base"
+    ]
+  },
+  
+  "prettier": "@repo/prettier-config"
+}

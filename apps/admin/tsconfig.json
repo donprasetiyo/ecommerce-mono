@@ -1,0 +1,20 @@
+{
+  "extends": "@repo/typescript-config/esm.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@admin/*": ["./src/*"]
+    },
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "incremental": true,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": [".", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "build", "dist"]
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/typescript-config/cjs.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "dist"]
+}

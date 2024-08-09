@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "AIModel" ALTER COLUMN "label" DROP DEFAULT,
+ALTER COLUMN "public_name" DROP DEFAULT;

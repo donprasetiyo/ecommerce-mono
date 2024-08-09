@@ -1,0 +1,9 @@
+model EmailVerificationCode {
+  id         BigInt   @id @unique @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  code       String
+  user_id    String   @unique
+  email      String
+  expires_at DateTime @db.Timestamptz(6)
+  user       User     @relation(references: [id], fields: [user_id])
+}
