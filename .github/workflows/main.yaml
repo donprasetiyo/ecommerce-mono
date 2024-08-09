@@ -33,17 +33,17 @@ jobs:
           echo PG_PASSWORD=${{ secrets.PG_PASSWORD }} >> .env
           echo PG_NAME=${{ secrets.PG_NAME }} >> .env
           echo PG_PORT=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_KEY_ID=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_KEY_SECRET=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_BUCKET=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_PATH=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_REGION=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_PROTOCOL=${{ secrets.PG_PORT }} >> .env
-          echo DB01_S3_CERT_SKIP_VERIFY=${{ secrets.PG_PORT }} >> .env
-          echo WEB_IMAGE_ECR=${{ secrets.PG_PORT }} >> .env
-          echo WEB_PORT=${{ secrets.PG_PORT }} >> .env
-          echo WEB_BASE_URL=${{ secrets.PG_PORT }} >> .env
-          echo ADMIN_BASE_URL=${{ secrets.PG_PORT }} >> .env
+          echo DB01_S3_KEY_ID=${{ secrets.DB01_S3_KEY_ID }} >> .env
+          echo DB01_S3_KEY_SECRET=${{ secrets.DB01_S3_KEY_SECRET }} >> .env
+          echo DB01_S3_BUCKET=${{ secrets.DB01_S3_BUCKET }} >> .env
+          echo DB01_S3_PATH=${{ secrets.DB01_S3_PATH }} >> .env
+          echo DB01_S3_REGION=${{ secrets.DB01_S3_REGION }} >> .env
+          echo DB01_S3_PROTOCOL=${{ secrets.DB01_S3_PROTOCOL }} >> .env
+          echo DB01_S3_CERT_SKIP_VERIFY=${{ secrets.DB01_S3_CERT_SKIP_VERIFY }} >> .env
+          echo WEB_IMAGE_ECR=${{ secrets.WEB_IMAGE_ECR }} >> .env
+          echo WEB_PORT=${{ secrets.WEB_PORT }} >> .env
+          echo WEB_BASE_URL=${{ secrets.WEB_BASE_URL }} >> .env
+          echo ADMIN_BASE_URL=${{ secrets.ADMIN_BASE_URL }} >> .env
           cat .env
           cp .env apps/web/.env
-          bash ./push-image.sh
+          bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1
