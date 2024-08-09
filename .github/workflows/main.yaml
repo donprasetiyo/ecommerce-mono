@@ -46,4 +46,4 @@ jobs:
           echo ADMIN_BASE_URL=${{ secrets.PG_PORT }} >> .env
           cat .env
           cp .env apps/web/.env
-          bash ./apps/web/push-image.sh
+          bash ./push-image.sh
