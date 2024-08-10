@@ -1,0 +1,4 @@
+ecommerce-mono.donprasetiyo.com {
+  reverse_proxy ecommerce-mono-web:8439
+  tls /etc/ssl/certs/custom/ecommerce-mono.pem /etc/ssl/private/custom/ecommerce-mono.pem
+}

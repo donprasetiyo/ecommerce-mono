@@ -85,5 +85,7 @@ jobs:
             chmod +x ecr-login.sh
             bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
             docker compose up -d
+            docker stop single-vps-host-caddy_reverse_proxy-1
+            docker remove single-vps-host-caddy_reverse_proxy-1 -v
             cd ..
             docker compose up -d
