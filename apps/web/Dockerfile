@@ -70,7 +70,7 @@ ENV PORT ${PORT}
 RUN ls -lh
 RUN cd apps
 RUN ls -lh
-RUN web
+RUN cd web
 RUN ls -lh
 RUN cd ..
 RUN cd ..
