@@ -61,12 +61,12 @@ RUN mkdir -p /pnpm && chown -R nextjs:nodejs /pnpm
 USER nextjs
 RUN pnpm install -g dotenv dotenv-cli prisma kysely prisma-kysely
 
-# ENV NODE_ENV production
+ENV NODE_ENV production
 
-# EXPOSE ${PORT}
+EXPOSE ${PORT}
 
-# ENV PORT ${PORT}
+ENV PORT ${PORT}
 
-# CMD HOSTNAME="0.0.0.0" node apps/${APP_NAME}/server.js
+CMD HOSTNAME="0.0.0.0" node apps/${APP_NAME}/server.js
 
 # CMD ["./apps/web/migrateandstart.sh"]
