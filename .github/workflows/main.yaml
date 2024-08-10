@@ -56,20 +56,6 @@ jobs:
           cp .env ../build/
           cp ecr-login.sh ../build/
           tar -cvf deploy.tar ../build/
-
-      - name: Create working directory
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          passphrase: ${{secrets.SERVER_PASSPHRASE}}
-          script: |
-            cd /
-            cd /root
-            mkdir ecommerce-mono
-            cd ecommerce-mono
           
       - name: Copy env and docker compose
         uses: appleboy/scp-action@master
@@ -80,7 +66,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           passphrase: ${{secrets.SERVER_PASSPHRASE}}
           source: "deploy.tar"
-          target: "/root/ecommerce-mono"
+          target: "/root/single-vps-host"
 
       - name: run compose
         uses: appleboy/ssh-action@master
@@ -92,7 +78,7 @@ jobs:
           passphrase: ${{secrets.SERVER_PASSPHRASE}}
           script: |
             cd /
-            cd /root/ecommerce-mono
+            cd /root/single-vps-host
             tar -xf deploy.tar
             ls -a
             cd build
