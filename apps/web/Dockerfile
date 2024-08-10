@@ -67,4 +67,4 @@ EXPOSE ${PORT}
 
 ENV PORT ${PORT}
 
-CMD [`./apps/${APP_NAME}/migrateandstart.sh`]
+CMD ["sh", "-c", "./apps/${APP_NAME}/migrateandstart.sh"]
