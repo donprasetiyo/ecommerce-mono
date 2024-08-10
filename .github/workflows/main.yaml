@@ -13,7 +13,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -47,14 +47,6 @@ jobs:
           cat .env
           cp .env apps/web/.env
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1 ${{ vars.WEB_PORT }} next
-
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - name: Checkout code
-        uses: actions/checkout@v4
 
           # Runs a set of commands using the runners shell
       - name: Run a multi-line script
