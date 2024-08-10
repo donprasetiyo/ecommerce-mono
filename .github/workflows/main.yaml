@@ -92,8 +92,8 @@ jobs:
           passphrase: ${{secrets.SERVER_PASSPHRASE}}
           script: |
             cd /
-            cd /root/single-vps-host
-            cd /
             cd /root/ecommerce-mono
+            tar -xf deploy.tar
+            cd /build
             bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
             docker compose up -d
