@@ -47,3 +47,60 @@ jobs:
           cat .env
           cp .env apps/web/.env
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1 ${{ vars.WEB_PORT }} next
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+          # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          mkdir ../build
+          cp -TR docker-compose.yml ../build
+          cp -TR .env ../build
+          tar -cvf deploy.tar ../build/
+
+      - name: Create working directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          passphrase: ${{secrets.SERVER_PASSPHRASE}}
+          script: |
+            cd /
+            cd /root
+            mkdir ecommerce-mono
+            cd ecommerce-mono
+          
+      - name: Copy env and docker compose
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          passphrase: ${{secrets.SERVER_PASSPHRASE}}
+          source: "deploy.tar"
+          target: "/root/ecommerce-mono"
+
+      - name: run compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          passphrase: ${{secrets.SERVER_PASSPHRASE}}
+          script: |
+            cd /
+            cd /root/single-vps-host
+            cd /
+            cd /root/ecommerce-mono
+            bash ./ecr-login.sh
+            docker compose up -d
