@@ -94,5 +94,5 @@ jobs:
             cd /root/single-vps-host
             cd /
             cd /root/ecommerce-mono
-            bash ./ecr-login.sh
+            bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
             docker compose up -d
