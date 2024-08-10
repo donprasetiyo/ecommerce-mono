@@ -54,19 +54,19 @@ services:
     networks:
       - caddy_network
 
-  # web:
-  #   image: ${WEB_IMAGE_ECR}:latest
-  #   container_name: ecommerce-mono-web
-  #   pull_policy: always
-  #   restart: always
-  #   networks:
-  #     - caddy_network
-  #   env_file:
-  #     - path: ./.env.web
-  #   ports:
-  #     - ${WEB_PORT}:${WEB_PORT}
-  #   depends_on:
-  #     - 'db'
+  web:
+    image: ${WEB_IMAGE_ECR}:latest
+    container_name: ecommerce-mono-web
+    pull_policy: always
+    restart: always
+    networks:
+      - caddy_network
+    env_file:
+      - path: ./.env
+    ports:
+      - ${WEB_PORT}:${WEB_PORT}
+    depends_on:
+      - 'db'
 
 networks:
   caddy_network:
