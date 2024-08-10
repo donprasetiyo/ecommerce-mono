@@ -94,7 +94,8 @@ jobs:
             cd /
             cd /root/ecommerce-mono
             tar -xf deploy.tar
-            cd /build
+            ls -a
+            cd build
             chmod +x ecr-login.sh
             bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
             docker compose up -d
