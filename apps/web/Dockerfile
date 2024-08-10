@@ -67,16 +67,8 @@ EXPOSE ${PORT}
 
 ENV PORT ${PORT}
 
-RUN ls -lh
-RUN cd apps
-RUN ls -lh
-RUN cd apps
-RUN ls -lh
-RUN cd web
-RUN ls -lh
-RUN cd ..
-RUN cd ..
+RUN ls -lR
 
-CMD HOSTNAME="0.0.0.0" node apps/apps/web/server.js
+# CMD HOSTNAME="0.0.0.0" node ./apps/web/server.js
 
-# CMD ["./apps/web/migrateandstart.sh"]
+CMD ["./apps/web/migrateandstart.sh"]
