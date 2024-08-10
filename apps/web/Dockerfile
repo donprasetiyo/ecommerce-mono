@@ -49,9 +49,9 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/${APP_NAME}/.next/static .
 COPY --from=installer --chown=nextjs:nodejs /app/apps/${APP_NAME}/public ./apps/${APP_NAME}/public
 
 COPY --from=installer --chown=nextjs:nodejs /app/packages/database/prisma ./packages/database/prisma
-COPY --from=installer --chown=nextjs:nodejs /app/apps/${APP_NAME}/migrateandstart.sh ./apps/${APP_NAME}
+COPY --from=installer --chown=nextjs:nodejs /app/apps/${APP_NAME}/migrateandstart.sh ./
 
-RUN chmod +x /app/apps/${APP_NAME}/migrateandstart.sh
+RUN chmod +x /app/migrateandstart.sh
 
 # Create and set permissions for /pnpm
 USER root
@@ -67,4 +67,4 @@ EXPOSE ${PORT}
 
 ENV PORT ${PORT}
 
-CMD ["sh", "-c", "./apps/${APP_NAME}/migrateandstart.sh"]
+CMD ["./migrateandstart.sh"]
