@@ -51,9 +51,9 @@ jobs:
   
       - name: Run a multi-line script
         run: |
-          mkdir ../build
-          cp -TR docker-compose.yaml ../build
-          cp -TR .env ../build
+          mkdir -p ../build
+          cp docker-compose.yaml ../build/
+          cp .env ../build/
           tar -cvf deploy.tar ../build/
 
       - name: Create working directory
