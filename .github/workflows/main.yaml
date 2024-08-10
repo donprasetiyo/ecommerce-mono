@@ -54,6 +54,7 @@ jobs:
           mkdir -p ../build
           cp docker-compose.yaml ../build/
           cp .env ../build/
+          cp main.Caddyfile ../build/
           cp ecr-login.sh ../build/
           tar -cvf deploy.tar ../build/
           
@@ -84,4 +85,7 @@ jobs:
             cd build
             chmod +x ecr-login.sh
             bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
+            docker compose up -d
+            cd ..
+            cp /build/main.Caddyfile .
             docker compose up -d
