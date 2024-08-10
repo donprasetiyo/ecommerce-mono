@@ -87,5 +87,5 @@ jobs:
             bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
             docker compose up -d
             cd ..
-            cp /build/main.Caddyfile .
+            cp ./build/main.Caddyfile .
             docker compose up -d

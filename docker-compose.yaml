@@ -54,7 +54,7 @@ services:
     networks:
       - caddy_network
 
-  web:
+  ecommerce-mono-web:
     image: ${WEB_IMAGE_ECR}:latest
     container_name: ecommerce-mono-web
     pull_policy: always
