@@ -15,7 +15,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./infra/postgres/custom.conf:/etc/postgresql.conf
-      - ./logs:/logs
+      - ./infra/postgres/logs:/logs
     networks:
       - caddy_network
 
@@ -23,7 +23,7 @@ services:
     container_name: ecommerce-mono-db-backup
     image: tiredofit/db-backup:4.0.35
     volumes:
-      - ./backups:/backup
+      - ./infra/postgres/backups:/backup
     environment:
       - TIMEZONE=Asia/Bangkok
       - CONTAINER_NAME=ecommerce-mono-db-backup
