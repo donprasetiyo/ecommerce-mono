@@ -54,7 +54,7 @@ services:
     networks:
       - caddy_network
 
-  ecommerce-mono-web:
+  web:
     image: ${WEB_IMAGE_ECR}:latest
     container_name: ecommerce-mono-web
     pull_policy: always
@@ -65,9 +65,77 @@ services:
       - path: ./.env
     ports:
       - ${WEB_PORT}:${WEB_PORT}
-    # depends_on:
-    #   - 'db'
+    depends_on:
+      - db
 
+  zoo1:
+    image: confluentinc/cp-zookeeper:7.3.2
+    hostname: ${ZOO1_NAME}
+    container_name: ecommerce-mono-${ZOO1_NAME}
+    ports:
+      - "${ZOO1_PORT_EXTERNAL}:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: ${ZOO1_PORT_EXTERNAL}
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: ${ZOO1_NAME}:2888:3888
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.3.2
+    hostname: ecommerce-mono-kafka1
+    container_name: ecommerce-mono-kafka1
+    ports:
+      - "${KAFKA1_PORT_EXTERNAL}:9092"
+      - "${KAFKA1_PORT_EXTERNAL_2}:29092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://ecommerce-mono-kafka1:9092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:${KAFKA1_PORT_EXTERNAL},DOCKER://host.docker.internal:${KAFKA1_PORT_DOCKER}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "${ZOO1_NAME}:${ZOO1_PORT_EXTERNAL}"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    depends_on:
+      - ${ZOO1_NAME}
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.3.2
+    hostname: ecommerce-mono-kafka2
+    container_name: ecommerce-mono-kafka2
+    ports:
+      - "${KAFKA2_PORT_EXTERNAL}:9092"
+      - "${KAFKA2_PORT_EXTERNAL_2}:29092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://ecommerce-mono-kafka2:9092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:${KAFKA2_PORT_EXTERNAL},DOCKER://host.docker.internal:${KAFKA2_PORT_DOCKER}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "${ZOO1_NAME}:${ZOO1_PORT_EXTERNAL}"
+      KAFKA_BROKER_ID: 2
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    depends_on:
+      - ${ZOO1_NAME}
+
+  kafka3:
+    image: confluentinc/cp-kafka:7.3.2
+    hostname: ecommerce-mono-kafka3
+    container_name: ecommerce-mono-kafka3
+    ports:
+      - "${KAFKA3_PORT_EXTERNAL}:9092"
+      - "${KAFKA3_PORT_EXTERNAL_2}:29092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://ecommerce-mono-kafka3:9092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:${KAFKA3_PORT_EXTERNAL},DOCKER://host.docker.internal:${KAFKA3_PORT_DOCKER}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "${ZOO1_NAME}:${ZOO1_PORT_EXTERNAL}"
+      KAFKA_BROKER_ID: 3
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
+    depends_on:
+      - ${ZOO1_NAME}
+      
 networks:
   caddy_network:
     external: true
