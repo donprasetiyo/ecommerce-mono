@@ -4,3 +4,4 @@ build
 .env
 .turbo
 .env.web
+packages/database/prisma/migrations

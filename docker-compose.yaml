@@ -11,9 +11,9 @@ services:
       POSTGRES_PASSWORD: ${PG_PASSWORD}
       POSTGRES_DATABASE: ${PG_DB}
     ports: 
-      - "${PG_PORT}:${PG_PORT}"     
+      - "${PG_PORT}:5432"     
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data_ecommerce_mono:/var/lib/postgresql/data
       - ./infra/postgres/custom.conf:/etc/postgresql.conf
       - ./infra/postgres/logs:/logs
     networks:
@@ -79,8 +79,5 @@ volumes:
     external: true
   caddy_config:
     external: true
-  pg_data:
+  pg_data_ecommerce_mono:
    driver: local
-  pgadmin-data:
-   driver: local
-

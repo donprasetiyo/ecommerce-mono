@@ -4,63 +4,105 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-import type { UserStatus, GenerationStatus, AIModelPricingBasedOn, SubscriptionType, SubcriptionStatus, InvoiceStatus, TransactionType, TransactionStatus, PaymentMethod, WaitingListStatus } from "./enums";
+import type { UserStatus, InvoiceStatus, TransactionStatus, PaymentMethod } from "./enums";
 
-export type AIModel = {
+export type Address = {
+    id: Generated<string>;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    address_line_1: string | null;
+    address_line_2: string | null;
+    city: string | null;
+    country: string | null;
+    postal_code: string | null;
+    user_id: string;
+    landmark: string | null;
+    phone_number: string | null;
+};
+export type Attribute = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
     deleted_at: Timestamp | null;
     name: string;
-    source: string;
-    public_name: string;
-    label: string;
-    price_based_on: AIModelPricingBasedOn;
-    icon: string;
 };
-export type AIModelPrice = {
+export type AttributeValueDatetime = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
     deleted_at: Timestamp | null;
-    from_date: Timestamp;
-    to_date: Timestamp;
-    currency_code: string;
-    model_id: string;
-    input_pertoken_price: string;
-    output_pertoken_price: string;
-    fee_pertransaction: string;
+    attribute_id: string;
+    entity_id: string;
+    value: Timestamp;
 };
-export type Chat = {
+export type AttributeValueDecimal = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    attribute_id: string;
+    entity_id: string;
+    value: string;
+};
+export type AttributeValueInt = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    attribute_id: string;
+    entity_id: string;
+    value: number;
+};
+export type AttributeValueText = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    attribute_id: string;
+    entity_id: string;
+    value: string;
+};
+export type AttributeValueVarchar = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    attribute_id: string;
+    entity_id: string;
+    value: string;
+};
+export type Cart = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
     user_id: string;
-    title: string;
+    total: number | null;
 };
-export type Conversation = {
+export type CartItem = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    chat_id: string;
+    cart_id: string;
+    product_id: string;
+    product_sku_id: string;
+    quantity: number | null;
 };
-export type ConversationsOnTextGenerations = {
-    text_generation_id: string;
-    conversation_id: string;
-};
-export type Credit = {
+export type Category = {
     id: Generated<string>;
     public_id: string;
-    balance: Generated<string>;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    user_id: string;
-    expires_at: Timestamp;
-    last_transaction: Timestamp | null;
+    deleted_at: Timestamp | null;
+    description: string | null;
 };
 export type Currency = {
     id: Generated<string>;
@@ -78,73 +120,13 @@ export type EmailVerificationCode = {
     email: string;
     expires_at: Timestamp;
 };
-export type ExpiredCredit = {
-    id: Generated<string>;
-    public_id: string;
-    expired_amount: Generated<string>;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    expired_date: Timestamp;
-    user_id: string;
-};
-export type Generation = {
+export type Entity = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    user_id: string;
     deleted_at: Timestamp | null;
-};
-export type GenerationMetadata = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    generation_id: string;
-    model_name: string;
-    model_label: string;
-    currency_code: string;
-    input_pertoken_price: string;
-    output_pertoken_price: string;
-    fee_pertransaction: string;
-    model_source: string;
-    input: string;
-    output: string;
-    input_token: number;
-    output_token: number;
-    total_token: number;
-    input_usage: string;
-    output_usage: string;
-    total_usage: string;
-    total_spending: string;
-    generation_status: GenerationStatus;
-};
-export type ImageGeneration = {
-    id: Generated<string>;
-    public_id: string;
-    status: GenerationStatus;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    generation_id: string;
-    conversation_id: string | null;
-};
-export type ImageInput = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    content: string;
-    image_generation_id: string;
-};
-export type ImageOutput = {
-    id: Generated<string>;
-    public_id: string;
-    status: GenerationStatus;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    content: string;
-    image_input_id: string;
-    image_generation_id: string;
+    name: string;
 };
 export type Invoice = {
     id: Generated<string>;
@@ -179,84 +161,49 @@ export type InvoiceItem = {
     name: string;
     quantity: number;
     unit_price: string;
+    product_sku_id: string;
     product_id: string;
     invoice_id: string;
     amount: string;
     vat_amount: string | null;
     vat_percentage: string | null;
 };
-export type OpenAIResponse = {
+export type Metadata = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    response_choices_finish_reason: string | null;
-    response_choices_index: number;
-    response_choices_message_content: string;
-    response_choices_message_role: string | null;
-    response_choices_logprops: string | null;
-    response_created: string;
-    response_id: string;
-    response_model: string;
-    response_object: string;
-    response_usage_completion_tokens: number | null;
-    response_usage_prompt_tokens: number | null;
-    response_usage_total_tokens: number | null;
-    generation_metadata_id: string | null;
+    deleted_at: Timestamp | null;
+    attribute_id: string;
+    data_type: string;
+    is_required: boolean;
+    format: string;
+    is_searchable: boolean;
+};
+export type OrderDetail = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    user_id: string;
+    transaction_id: string;
+    total: number | null;
+};
+export type OrderItem = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    order_id: string;
+    product_id: string;
+    product_sku_id: string;
+    quantity: number | null;
 };
 export type PasswordResetToken = {
     id: Generated<string>;
     token_hash: string;
     user_id: string;
     expires_at: Timestamp;
-};
-export type PaypalCapture = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    capture_id: string;
-    amount_value: string;
-    amount_currency_code: string;
-    capture_status: string;
-    create_time: Timestamp;
-    update_time: Timestamp;
-    final_capture: boolean;
-    seller_protection_status: string;
-    seller_protection_dispute_categories: string[];
-    seller_receivable_net_amount_value: string;
-    seller_receivable_net_amount_currency_code: string;
-    seller_receivable_paypal_fee_value: string;
-    seller_receivable_paypal_fee_currency_code: string;
-    seller_receivable_gross_amount_value: string;
-    seller_receivable_gross_amount_currency_code: string;
-    order_id: string | null;
-};
-export type PaypalPaymentSource = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    order_id: string | null;
-    account_id: string;
-    account_status: string;
-    email_address: string;
-    given_name: string;
-    surname: string;
-    country_code: string;
-};
-export type PaypalResponse = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    order_id: string;
-    status: string;
-    payer_id: string;
-    payer_email: string;
-    payer_given_name: string;
-    payer_surname: string;
-    payer_country: string;
 };
 export type Product = {
     id: Generated<string>;
@@ -266,10 +213,19 @@ export type Product = {
     deleted_at: Timestamp | null;
     name: string;
     description: string;
-    features: string[];
-    includesUpcomingFeatures: boolean;
-    note: string;
-    paypal_product_id: string | null;
+    summary: string | null;
+    cover: string | null;
+    category_id: string | null;
+};
+export type ProductAttribute = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    product_sku_id: string;
+    attribute_id: string;
+    value: string | null;
 };
 export type ProductPrice = {
     id: Generated<string>;
@@ -280,8 +236,19 @@ export type ProductPrice = {
     to_date: Timestamp;
     price: string;
     currency_code: string;
-    product_id: string;
+    product_sku_id: string;
     deleted_at: Timestamp | null;
+};
+export type ProductSKU = {
+    id: Generated<string>;
+    public_id: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Generated<Timestamp>;
+    deleted_at: Timestamp | null;
+    product_id: string;
+    sku: string | null;
+    price: string | null;
+    quantity: number | null;
 };
 export type Receipt = {
     id: Generated<string>;
@@ -314,29 +281,10 @@ export type ReceiptItem = {
     unit_price: string;
     receipt_id: string;
     amount: string;
-    product_id: string;
+    product_sku_id: string;
     vat_amount: string | null;
     vat_percentage: string | null;
-};
-export type ReplicateResponse = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    prediction_official_model_name: string;
-    prediction_id: string;
-    prediction_status: string;
-    prediction_hardware: string;
-    prediction_created: Timestamp;
-    prediction_input_prompt: string;
-    prediction_input_template: string;
-    prediction_logs: string;
-    prediction_metrics_total_time: string;
-    prediction_metrics_input_token_count: number;
-    prediction_metrics_tokens_per_second: string;
-    prediction_metrics_output_token_count: number;
-    prediction_metrics_predict_time: string;
-    generation_metadata_id: string | null;
+    product_id: string;
 };
 export type Role = {
     id: Generated<string>;
@@ -349,84 +297,25 @@ export type Session = {
     expires_at: Timestamp;
     user_id: string;
 };
-export type Subscription = {
+export type SubCategory = {
     id: Generated<string>;
     public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    user_id: string;
-    cancelled_at: Timestamp | null;
-    downgraded_at: Timestamp | null;
-    downgraded_to_plan_id: string | null;
-    upgraded_to_plan_id: string | null;
-    ends_at: Timestamp;
-    invoice_id: string;
-    plan_id: string;
-    renewed_at: Timestamp | null;
-    renewed_subscription_id: string | null;
-    starts_at: Timestamp;
-    upgraded_at: Timestamp | null;
-    status: SubcriptionStatus;
     deleted_at: Timestamp | null;
-    receipt_id: string | null;
-    paypal_subscription_id: string | null;
-    transaction_id: string;
-    auto_renewal: Generated<boolean>;
-};
-export type SubscriptionPlan = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    billing_interval: Generated<number>;
-    product_id: string;
-    deleted_at: Timestamp | null;
-    paypal_plan_id: string | null;
-};
-export type TextGeneration = {
-    id: Generated<string>;
-    public_id: string;
-    status: GenerationStatus;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    generation_id: string;
-    edit_conversation_index: number | null;
-    edit_mark: string | null;
-    regenerate_conversation_index: number | null;
-    regenerate_mark: string | null;
-};
-export type TextInput = {
-    id: Generated<string>;
-    public_id: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    content: string;
-    text_generation_id: string;
-};
-export type TextOutput = {
-    id: Generated<string>;
-    public_id: string;
-    status: GenerationStatus;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    content: string;
-    text_input_id: string;
-    text_generation_id: string;
+    parent_id: string;
+    name: string | null;
+    description: string | null;
 };
 export type Transaction = {
     id: Generated<string>;
     public_id: string;
     amount: string;
-    transaction_type: TransactionType;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    paypal_transaction: unknown | null;
     user_id: string;
-    generation_metadata_id: string | null;
-    subscription_type: SubscriptionType | null;
     transaction_status: TransactionStatus;
-    paypal_response_id: string | null;
-    paypal_order_id: string | null;
+    order_id: string;
 };
 export type User = {
     id: string;
@@ -434,66 +323,56 @@ export type User = {
     password_hash: string;
     email_verified: boolean;
     created_at: Generated<Timestamp>;
-    discord_username: string | null;
-    discord_user_id: string | null;
-    discord_avatar_id: string | null;
-    discord_email: string | null;
-    discord_global_name: string | null;
-    discord_locale: string | null;
     status: Generated<UserStatus>;
     deleted_at: Timestamp | null;
-    address_line_1: string | null;
-    address_line_2: string | null;
-    city: string | null;
-    country: string | null;
     currency_code: Generated<string>;
     email: string;
-    name: string | null;
-    postal_code: string | null;
+    avatar: string | null;
+    first_name: string | null;
+    last_name: string | null;
+    birth_of_date: Timestamp | null;
+    phone_number: string | null;
     role_name: Generated<string>;
 };
-export type WaitingListUser = {
+export type Wishlist = {
     id: Generated<string>;
+    public_id: string;
     created_at: Generated<Timestamp>;
     updated_at: Generated<Timestamp>;
-    email: string;
-    status: WaitingListStatus;
+    user_id: string;
+    product_id: string;
+    product_sku_id: string;
 };
 export type DB = {
-    AIModel: AIModel;
-    AIModelPrice: AIModelPrice;
-    Chat: Chat;
-    Conversation: Conversation;
-    ConversationsOnTextGenerations: ConversationsOnTextGenerations;
-    Credit: Credit;
+    Address: Address;
+    Attribute: Attribute;
+    AttributeValueDatetime: AttributeValueDatetime;
+    AttributeValueDecimal: AttributeValueDecimal;
+    AttributeValueInt: AttributeValueInt;
+    AttributeValueText: AttributeValueText;
+    AttributeValueVarchar: AttributeValueVarchar;
+    Cart: Cart;
+    CartItem: CartItem;
+    Category: Category;
     Currency: Currency;
     EmailVerificationCode: EmailVerificationCode;
-    ExpiredCredit: ExpiredCredit;
-    Generation: Generation;
-    GenerationMetadata: GenerationMetadata;
-    ImageGeneration: ImageGeneration;
-    ImageInput: ImageInput;
-    ImageOutput: ImageOutput;
+    Entity: Entity;
     Invoice: Invoice;
     InvoiceItem: InvoiceItem;
-    OpenAIResponse: OpenAIResponse;
+    Metadata: Metadata;
+    OrderDetail: OrderDetail;
+    OrderItem: OrderItem;
     PasswordResetToken: PasswordResetToken;
-    PaypalCapture: PaypalCapture;
-    PaypalPaymentSource: PaypalPaymentSource;
-    PaypalResponse: PaypalResponse;
     Product: Product;
+    ProductAttribute: ProductAttribute;
     ProductPrice: ProductPrice;
+    ProductSKU: ProductSKU;
     Receipt: Receipt;
     ReceiptItem: ReceiptItem;
-    ReplicateResponse: ReplicateResponse;
     Role: Role;
     Session: Session;
-    Subscription: Subscription;
-    SubscriptionPlan: SubscriptionPlan;
-    TextGeneration: TextGeneration;
-    TextInput: TextInput;
-    TextOutput: TextOutput;
+    SubCategory: SubCategory;
     Transaction: Transaction;
     User: User;
-    WaitingListUser: WaitingListUser;
+    Wishlist: Wishlist;
 };
