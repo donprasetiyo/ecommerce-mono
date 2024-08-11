@@ -8,6 +8,7 @@ import { TimeSpan, generateIdFromEntropySize } from 'lucia';
 import { createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString, sha256 } from 'oslo/crypto';
 import { encodeHex } from 'oslo/encoding';
+import {nanoid} from 'nanoid'
 
 interface PageResult<O> {
     results: O
@@ -40,7 +41,7 @@ export class PostgresClient {
             password: this.PASSWORD,
             database: this.DATABASE,
             port: this.PORT,
-            ssl: false ,
+            ssl: false,
             max: 10,
         });
 
@@ -60,12 +61,41 @@ export class PostgresClient {
     }
 
     public async createNewUser(userId: string, username: string, passwordHash: string, email: string) {
+        const defaultUSDCurrency = await this.db.selectFrom('Currency')
+            .where('Currency.code', '=', 'USD')
+            .select(['Currency.code'])
+            .executeTakeFirst();
+
+        if (!defaultUSDCurrency) {
+            await this.db.insertInto('Currency')
+            .values({
+                code: 'USD',
+                name: 'United States dollar',
+                public_id: nanoid()
+            })
+            .executeTakeFirstOrThrow()
+        }
+                const defaultRole = await this.db.selectFrom('Role')
+            .where('Role.name', '=', 'regular')
+            .select(['Role.name'])
+            .executeTakeFirst();
+
+        if (!defaultRole) {
+            await this.db.insertInto('Role')
+            .values({
+                description: 'Regular web user',
+                name: 'regular'
+            })
+            .executeTakeFirstOrThrow()
+        }
         const user = await this.db.insertInto('User').values({
             id: userId,
             username: username,
             password_hash: passwordHash,
             email: email,
-            email_verified: false
+            email_verified: false,
+            currency_code: 'USD',
+            role_name: 'regular'
         })
             .returning(['User.username', 'User.email'])
             .executeTakeFirst();

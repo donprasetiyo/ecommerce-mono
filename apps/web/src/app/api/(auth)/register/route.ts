@@ -19,6 +19,7 @@ export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestRegular();
 
   try {
+    debugger
     const registerStart = performance.now();
 
     if (existingSession) {
