@@ -5,7 +5,7 @@ export const siteconfig = {
     "capitalizedDescription": "description",
     "companyInfo": {
         "address": "Bogor, Indonesia",
-        "email": "email@domain.com"
-    },
-    "domain": "ecommerce.donprasetiyo.com"
+        "email": "noreply@donprasetiyo.com",
+        "noreplyEmail": "noreply@donprasetiyo.com"
+    }
 }

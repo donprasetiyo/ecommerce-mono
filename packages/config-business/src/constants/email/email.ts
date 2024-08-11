@@ -12,7 +12,7 @@ export const emailSetting = {
 } as const
 
 export const resetPasswordData: EmailData = {
-    fromAddress: `noreply@${siteconfig.domain}`,
+    fromAddress: `${siteconfig.companyInfo.noreplyEmail}`,
     subject: 'Password Reset Request for Your Account',
     body: `Dear {username},
 
@@ -29,7 +29,7 @@ Thank you,
 }
 
 export const emailVerificationData: EmailData = {
-    fromAddress: `noreply@${siteconfig.domain}`,
+    fromAddress: `${siteconfig.companyInfo.noreplyEmail}`,
     subject: 'Email Verification Code',
     body: `Dear {username},
 
