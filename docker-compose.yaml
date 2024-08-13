@@ -150,6 +150,7 @@ services:
 
   kafka-ssl-1:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka1
     depends_on:
       - zookeeper-1
       # - zookeeper-2
@@ -177,6 +178,7 @@ services:
 
   kafka-ssl-2:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka2
     depends_on:
       - zookeeper-1
       # - zookeeper-2
@@ -204,6 +206,7 @@ services:
 
   kafka-ssl-3:
     image: confluentinc/cp-kafka:latest
+    container_name: kafka3
     depends_on:
       - zookeeper-1
       # - zookeeper-2

@@ -8,6 +8,9 @@ import { AppRouterFactory } from "./app.router";
 
 const sslSecretsDir = path.join("../../", process.env.KAFKA_SSL_SECRETS_DIR!);
 
+const isProduction = process.env.NODE_ENV === 'production' ? true : false;
+const brokeNamesProd = ['kafka1', 'kafka2', 'kafka3']
+
 @Module({
   imports: [GreetingModule, PostModule, CurrencyModule, KafkaModule.register([
     {
@@ -16,9 +19,9 @@ const sslSecretsDir = path.join("../../", process.env.KAFKA_SSL_SECRETS_DIR!);
         client: {
           clientId: `kafka-client`,
           brokers: [
-            'localhost:19092',
-            'localhost:29092',
-            'localhost:39092' 
+            `${isProduction ? brokeNamesProd[0] : 'localhost'}:19092`,
+            `${isProduction ? brokeNamesProd[1] : 'localhost'}:29092`,
+            `${isProduction ? brokeNamesProd[2] : 'localhost'}:39092` 
           ],
           ssl: {
             rejectUnauthorized: false,
