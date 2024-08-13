@@ -48,6 +48,7 @@ jobs:
           echo KAFKA_SSL_SECRETS_DIR=${{ vars.KAFKA_SSL_SECRETS_DIR }} >> .env
           cat .env
           cp .env apps/web/.env
+          mkdir -p infra/zoo-kafka/secrets
           touch ./infra/zoo-kafka/secrets/kafka.producer.CARoot.pem
           echo ${{ vars.KAFKA_CA }} >> ./infra/zoo-kafka/secrets/kafka.producer.CARoot.pem
           cat ./infra/zoo-kafka/secrets/kafka.producer.CARoot.pem
