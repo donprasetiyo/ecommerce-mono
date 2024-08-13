@@ -62,7 +62,9 @@ jobs:
           bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
 
       - name: Start containers
-        run: docker compose up -d --build
+        run: |
+          docker network create caddy_network
+          docker compose up -d --build
 
       - name: Build new web image and push to ECR
         shell: bash
