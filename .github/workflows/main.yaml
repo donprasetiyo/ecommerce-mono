@@ -22,11 +22,7 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActions
           aws-region: us-east-1
 
-      - name: Start containers
-        run: docker compose up -d --build
-
-      - name: Build new web image and push to ECR
-        shell: bash
+      - name: Set up env
         run: |
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
@@ -62,6 +58,13 @@ jobs:
           touch ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
           echo "${{ secrets.KAFKA_CERT }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
           cat ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
+
+      - name: Start containers
+        run: docker compose up -d --build
+
+      - name: Build new web image and push to ECR
+        shell: bash
+        run: |
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1 ${{ vars.WEB_PORT }} next ${{vars.KAFKA_SSL_SECRETS_DIR}}
   
       - name: Run a multi-line script
