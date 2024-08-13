@@ -19,11 +19,7 @@ import { type Session, type User } from "lucia";
 import LogOut from '@repo/ui/components/next/LogOut'
 import Link from 'next/link'
 
-type Plan = { product: { id: string; public_id: string; name: string; description: string; }; } | undefined
-
-export function UserNavigation({ session, user, plan }: { session: Session, user: any, plan: Plan}) {
-
-  const planText = plan === undefined ? 'Free plan' : plan.product.name;
+export function UserNavigation({ session, user }: { session: Session, user: any}) {
 
   return (
     <DropdownMenu>
@@ -41,9 +37,6 @@ export function UserNavigation({ session, user, plan }: { session: Session, user
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">{user.username ?? 'Error'}</p>
             </div>
-            <p className="text-xs leading-none text-muted-foreground">
-              {planText}
-            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

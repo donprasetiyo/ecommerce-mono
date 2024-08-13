@@ -37,6 +37,9 @@
       "cache": false,
       "persistent": true
     },
+    "start": {
+      "persistent": true
+    },
     "api#dev": {
       "dependsOn": [
         "build"

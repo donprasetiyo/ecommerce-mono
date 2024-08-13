@@ -8,7 +8,6 @@ import { KAFKA_MODULE_OPTIONS } from './constants';
 @Module({})
 export class KafkaModule {
   static register(options: KafkaModuleOption[]): DynamicModule {
-    debugger
     const clients = (options || []).map((item) => ({
       provide: item.name,
       useValue: new KafkaService(item.options),

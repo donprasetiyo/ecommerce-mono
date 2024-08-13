@@ -18,27 +18,32 @@ const brokeNamesProd = ['kafka1', 'kafka2', 'kafka3']
       options: {
         client: {
           clientId: `kafka-client`,
+          // brokers: [
+          //   `${isProduction ? brokeNamesProd[0] : 'localhost'}:19092`,
+          //   `${isProduction ? brokeNamesProd[1] : 'localhost'}:29092`,
+          //   `${isProduction ? brokeNamesProd[2] : 'localhost'}:39092` 
+          // ],
           brokers: [
-            `${isProduction ? brokeNamesProd[0] : 'localhost'}:19092`,
-            `${isProduction ? brokeNamesProd[1] : 'localhost'}:29092`,
-            `${isProduction ? brokeNamesProd[2] : 'localhost'}:39092` 
+            `localhost:19092`,
+            // `localhost:29092`,
+            // `localhost:39092` 
           ],
           ssl: {
             rejectUnauthorized: false,
-            ca: [fs.readFileSync(path.join(sslSecretsDir, 'kafka.producer.CARoot.pem'), 'utf-8')],
-            key: fs.readFileSync(path.join(sslSecretsDir, `kafka.producer.RSAkey.pem`), 'utf-8'),
-            cert: fs.readFileSync(path.join(sslSecretsDir, `kafka.producer.certificate.pem`), 'utf-8'),
+            ca: [fs.readFileSync(path.join(sslSecretsDir, 'kafka.consumer.CARoot.pem'), 'utf-8')],
+            key: fs.readFileSync(path.join(sslSecretsDir, `kafka.consumer.RSAkey.pem`), 'utf-8'),
+            cert: fs.readFileSync(path.join(sslSecretsDir, `kafka.consumer.certificate.pem`), 'utf-8'),
             passphrase: process.env.KAFKA_PASSPHRASE //todo: remake SSL
           }
         },
         consumer: {
-          groupId: 'ecommerce-mono-consumer'
+          groupId: 'ssl-host'
         }
       }
     },
   ])],
   controllers: [],
-  providers: [AppRouterFactory, AppContextFactory],
+  providers: [AppRouterFactory, AppContextFactory,KafkaProducer],
   exports: [AppRouterFactory, AppContextFactory],
 })
 export class AppModule { }

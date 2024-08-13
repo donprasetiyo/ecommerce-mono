@@ -1,0 +1,1 @@
+cp -R public .next/standalone/apps/web && cp -R .next/static .next/standalone/apps/web/.next

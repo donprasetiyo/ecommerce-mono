@@ -14,6 +14,7 @@ async function bootstrap() {
       level: "info",
     },
   });
+  
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

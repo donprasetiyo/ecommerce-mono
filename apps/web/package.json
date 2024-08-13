@@ -14,9 +14,10 @@
     "clean": "git clean -xdf .next .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
-    "start": "pnpm with-env node -p 8913",
+    "start": "cross-env PORT=8913 KAFKA_SSL_SECRETS_DIR=../../../../infra/zoo-kafka/secrets pnpm with-env node ./.next/standalone/apps/web/server.js",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "postbuild": "bash ./postbuild.sh"
   },
   "peerDependencies": {
     "next": "^14.2.4"

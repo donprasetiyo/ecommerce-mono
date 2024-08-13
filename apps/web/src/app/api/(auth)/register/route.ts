@@ -19,8 +19,6 @@ export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestRegular();
 
   try {
-    debugger
-    const registerStart = performance.now();
 
     if (existingSession) {
       throw new BadRequestError("UNAUTHORIZED");
@@ -62,11 +60,14 @@ export async function POST(request: Request) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }
 
+    const kafkaStart = performance.now();
     const sentCode = await sendEmailVerificationCode(
       parsedData.email,
       verificationCode.code,
       newUser.username,
     );
+    const kafkaEnd = performance.now();
+    console.log('kafka takes', (kafkaEnd - kafkaStart) / 1000, 'seconds')
     if (!sentCode) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }

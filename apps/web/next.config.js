@@ -32,11 +32,7 @@ const nextConfig = {
   webpack: (config, { dev }) => {
     config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
     return config;
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: { ignoreBuildErrors: true }
+  }
 };
 
 module.exports = nextConfig;

@@ -13,7 +13,12 @@ export class KafkaConsumer {
   @SubscribeTo('ecommerce-mono.email.send')
   async sendEmail(data: any, key: any, offset: number, timestamp: number, partition: number, headers: IHeaders): Promise<void> {
     debugger
-    console.log('test')
+    console.log('data', data);
+    console.log('key',key);
+    console.log('offset', offset);
+    console.log('timestamp', timestamp)
+    console.log('partition', partition)
+    console.log('headers', headers)
   }
 
 }
