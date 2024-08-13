@@ -1,12 +1,11 @@
 import { SendEmailCommand } from "@aws-sdk/client-ses";
 
-import { sesClient } from "./client";
+import { createKafka } from "@repo/api";
 import {
   EmailContent,
   getEmailVerificationData,
   getResetPasswordEmailData,
 } from "./getEmailData";
-import { createAppRouter, createKafka } from "@repo/api";
 
 const send = async (data: EmailContent) => {
   const sendEmailCommand = sendEmailSes(
