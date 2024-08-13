@@ -6,7 +6,7 @@ import { CurrencyModule, GreetingModule, KafkaModule, KafkaProducer, PostModule 
 
 import { AppRouterFactory } from "./app.router";
 
-const sslSecretsDir = path.join("../../", process.env.KAFKA_SSL_SECRETS_DIR!);
+const sslSecretsDir = path.join(process.env.KAFKA_SSL_SECRETS_DIR!);
 
 @Module({
   imports: [GreetingModule, PostModule, CurrencyModule, KafkaModule.register([
