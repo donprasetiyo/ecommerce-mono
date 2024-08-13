@@ -65,6 +65,8 @@ jobs:
       - name: Build new web image and push to ECR
         shell: bash
         run: |
+          chmod +x ecr-login.sh
+          bash ./ecr-login.sh ${{ secrets.WEB_IMAGE_ECR }} us-east-1
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1 ${{ vars.WEB_PORT }} next ${{vars.KAFKA_SSL_SECRETS_DIR}}
   
       - name: Run a multi-line script
