@@ -21,7 +21,10 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActions
           aws-region: us-east-1
 
-      - name: Build web image and push to ECR
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up -d --build
+
+      - name: Build new web image and push to ECR
         shell: bash
         run: |
           touch .env
