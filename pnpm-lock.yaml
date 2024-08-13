@@ -876,6 +876,9 @@ importers:
       '@swc/core':
         specifier: ^1.4.12
         version: 1.7.6(@swc/helpers@0.5.5)
+      '@types/node':
+        specifier: ^20.14.12
+        version: 20.14.14
       eslint:
         specifier: ^8.57.0
         version: 8.57.0

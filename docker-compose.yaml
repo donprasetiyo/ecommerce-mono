@@ -68,6 +68,28 @@ services:
       - ${WEB_PORT}:${WEB_PORT}
     depends_on:
       - db
+  # TODO: make environment for development
+  # frontend:
+  #   build:
+  #     context: .
+  #     target: development
+  #     dockerfile: ./tooling/docker/next/Dockerfile
+  #     args:
+  #       - APP_NAME=web
+  #       - PORT=${WEB_PORT}
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   command: tail -f /dev/null
+  #   networks:
+  #     - caddy_network
+  #     - kafka-net
+  #   env_file:
+  #     - path: ./.env
+  #   ports:
+  #     - ${WEB_PORT}:${WEB_PORT}
+  #   depends_on:
+  #     - db
 
   zookeeper-1:
     image: confluentinc/cp-zookeeper:latest
