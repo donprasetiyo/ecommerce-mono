@@ -11,6 +11,7 @@ import { createCallerFactory, createInnerContext } from "@repo/trpc";
 import type { AppRouter } from "./app.router";
 import { AppContextFactory } from "./app.context";
 import { AppRouterFactory } from "./app.router";
+import { KafkaProducer } from "@repo/features";
 
 /**
  * Inference helpers for input types
@@ -35,7 +36,14 @@ const createAppRouter = async () => {
   return appRouter;
 };
 
+const createKafka = async () => {
+  const app = await NestFactory.createApplicationContext(AppModule);
+  const kafka = app.get(KafkaProducer);
+  return kafka;
+};
+
 export {
+  createKafka,
   createAppRouter,
   createCallerFactory,
   createInnerContext,

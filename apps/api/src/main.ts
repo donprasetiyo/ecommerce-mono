@@ -4,9 +4,7 @@ import {
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
-
 import { AppContextFactory, AppModule, AppRouterFactory } from "@repo/api";
-
 import { TRPC_ENDPOINT, TRPC_PLAYGROUND_ENDPOINT } from "./constants";
 import { getFastifyTRPCPlaygroundPlugin } from "./trpc-playground";
 

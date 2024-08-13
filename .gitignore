@@ -5,3 +5,4 @@ build
 .turbo
 .env.web
 packages/database/prisma/migrations
+infra/zoo-kafka/secrets

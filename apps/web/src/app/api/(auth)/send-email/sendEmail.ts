@@ -6,6 +6,7 @@ import {
   getEmailVerificationData,
   getResetPasswordEmailData,
 } from "./getEmailData";
+import { createAppRouter, createKafka } from "@repo/api";
 
 const send = async (data: EmailContent) => {
   const sendEmailCommand = sendEmailSes(
@@ -16,7 +17,11 @@ const send = async (data: EmailContent) => {
   );
 
   try {
-    return await sesClient.send(sendEmailCommand);
+    const kafka = await createKafka();
+    kafka.sendEmail(
+      JSON.stringify(sendEmailCommand)
+    )
+    // return await sesClient.send(sendEmailCommand);
   } catch (caught) {
     if (caught instanceof Error && caught.name === "MessageRejected") {
       /** @type { import('@aws-sdk/client-ses').MessageRejected} */

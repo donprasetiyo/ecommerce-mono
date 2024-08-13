@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import * as sharedTypes from '@repo/shared-types' //DO NOT REMOVE: https://github.com/microsoft/TypeScript/issues/47663#issuecomment-1519138189
-
 import { CurrencyRouter, GreetingRouter, PostRouter } from "@repo/features";
 import { mergeRouters } from "@repo/trpc";
 
