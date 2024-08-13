@@ -50,13 +50,13 @@ jobs:
           cp .env apps/web/.env
           mkdir -p ${{vars.KAFKA_SSL_SECRETS_DIR}}
           touch ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.CARoot.pem
-          echo "${{ vars.KAFKA_CA }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.CARoot.pem
+          echo "${{ secrets.KAFKA_CA }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.CARoot.pem
           cat ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.CARoot.pem
           touch ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.RSAkey.pem
-          echo "${{ vars.KAFKA_RSA }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.RSAkey.pem
+          echo "${{ secrets.KAFKA_RSA }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.RSAkey.pem
           cat ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.RSAkey.pem
           touch ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
-          echo "${{ vars.KAFKA_CERT }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
+          echo "${{ secrets.KAFKA_CERT }}" >> ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
           cat ${{vars.KAFKA_SSL_SECRETS_DIR}}/kafka.producer.certificate.pem
           bash ./push-image.sh web ${{ secrets.WEB_IMAGE_ECR }} us-east-1 ${{ vars.WEB_PORT }} next ${{vars.KAFKA_SSL_SECRETS_DIR}}
   
