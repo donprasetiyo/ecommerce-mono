@@ -24,15 +24,14 @@ RUN apk update
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
-RUN ls -lh
-COPY --from=builder /app/${KAFKA_SSL_SECRETS_DIR} ${KAFKA_SSL_SECRETS_DIR}
-RUN ls -lh
+COPY --from=builder /app/${KAFKA_SSL_SECRETS_DIR} /app/out/full/${KAFKA_SSL_SECRETS_DIR}
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 
 # Build the project
 COPY --from=builder /app/out/full/ .
+RUN ls -lh
 RUN pnpm dlx turbo run build --filter=${APP_NAME}
 
 FROM base AS runner
