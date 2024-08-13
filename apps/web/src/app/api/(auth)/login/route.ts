@@ -19,8 +19,6 @@ import {
 import { validateRequestRegular } from "~/src/auth/validateRequestRegular";
 import { sendEmailVerificationCode } from "../send-email/sendEmail";
 
-export const dynamic = 'force-dynamic'
-
 export const POST = async (request: NextRequest) => {
   const { session: existingSession } = await validateRequestRegular();
 
