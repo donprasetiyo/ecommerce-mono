@@ -23,7 +23,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Start containers
-        run: docker-compose -f "docker-compose.yml" up -d --build
+        run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Build new web image and push to ECR
         shell: bash
