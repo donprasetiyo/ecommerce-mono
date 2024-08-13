@@ -1,6 +1,7 @@
 FROM node:18-alpine AS base
 ARG APP_NAME=""
 ARG PORT=""
+ARG KAFKA_SSL_SECRETS_DIR=""
 
 RUN npm install -g pnpm
 ENV PNPM_HOME="/pnpm"
@@ -23,6 +24,7 @@ RUN apk update
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
+COPY --from=builder /app/${KAFKA_SSL_SECRETS_DIR} .
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
