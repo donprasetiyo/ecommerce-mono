@@ -1,5 +1,5 @@
 {
-  "name": "@repo/features",
+  "name": "@repo/email",
   "version": "0.2.0",
   "private": true,
   "main": "./dist/index.js",
@@ -14,18 +14,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@kafkajs/confluent-schema-registry": "^3.3.0",
     "@nestjs/common": "^10.0.0",
-    "@nestjs/testing": "^10.0.0",
-    "kafkajs": "^2.2.4",
-    "kysely": "^0.27.3",
-    "zod": "^3.23.8"
+    "@nestjs/testing": "^10.0.0"
   },
   "devDependencies": {
-    "@repo/email": "workspace:^",
-    "@repo/kafka": "workspace:^",
+    "@aws-sdk/client-ses": "^3.600.0",
     "@repo/auth": "workspace:^",
     "@repo/database": "workspace:^",
+    "@repo/business-config": "workspace:^",
     "@repo/eslint-config": "workspace:^",
     "@repo/logging": "workspace:^",
     "@repo/shared-types": "workspace:^",

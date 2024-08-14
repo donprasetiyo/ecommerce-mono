@@ -12,8 +12,7 @@ import { generateIdFromEntropySize } from "lucia";
 import { lucia } from "@repo/auth";
 import { postgresClient } from "@repo/database";
 import { AuthError, BadRequestError, handleError } from "@repo/lib";
-
-import { sendEmailVerificationCode } from "../send-email/sendEmail";
+import { kafka } from "@admin/kafka/producer";
 
 export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestAdmin();
@@ -62,11 +61,12 @@ export async function POST(request: Request) {
     }
 
     const sendemailStart = performance.now();
-    const sentCode = await sendEmailVerificationCode(
-      parsedData.email,
-      verificationCode.code,
-      newUser.username,
-    );
+
+    const sentCode = await kafka.sendEmailVerificationCode({
+      toAddress: parsedData.email,
+      code: verificationCode.code,
+      username: newUser.username,
+    });
     if (!sentCode) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }

@@ -16,8 +16,7 @@ import {
   handleError,
   isWithinLastHours,
 } from "@repo/lib";
-
-import { sendEmailVerificationCode } from "../send-email/sendEmail";
+import { kafka } from "@admin/kafka/producer";
 
 export const POST = async (request: NextRequest) => {
   const { session: existingSession } = await validateRequestAdmin();
@@ -104,11 +103,11 @@ export const POST = async (request: NextRequest) => {
         throw new AuthError("USER_LOGGED_IN_BUT_EMAIL_VERIFY_FAILED");
       }
 
-      const sentCode = await sendEmailVerificationCode(
-        user.email,
-        verificationCode.code,
-        user.username,
-      );
+      const sentCode = await kafka.sendEmailVerificationCode({
+        toAddress: user.email,
+        code: verificationCode.code,
+        username: user.username,
+      });
       if (!sentCode) {
         throw new AuthError("USER_LOGGED_IN_BUT_EMAIL_VERIFY_FAILED");
       }

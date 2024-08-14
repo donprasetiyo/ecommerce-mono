@@ -7,8 +7,7 @@ import { NextResponse } from "next/server";
 
 import { postgresClient } from "@repo/database";
 import { AuthError, BadRequestError, handleError } from "@repo/lib";
-
-import { sendResetPasswordEmail } from "../send-email/sendEmail";
+import { kafka } from "@admin/kafka/producer";
 
 export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestAdmin();
@@ -18,29 +17,29 @@ export async function POST(request: Request) {
       throw new BadRequestError("UNAUTHORIZED");
     }
 
-    try {
-      const body = await request.json();
-      const data: ResetPasswordRequestSchema = {
-        usernameOrEmail: body.usernameOrEmail,
-      };
-      const parsedData = resetPasswordRequestSchema.parse(data);
+    const body = await request.json();
+    const data: ResetPasswordRequestSchema = {
+      usernameOrEmail: body.usernameOrEmail,
+    };
+    const parsedData = resetPasswordRequestSchema.parse(data);
 
-      const user = await postgresClient.ensureUserExistByUsernameOrEmail(
-        parsedData.usernameOrEmail,
-      );
-      if (!user) {
-        throw new AuthError("INVALID_EMAIL");
-      }
-
-      const verificationToken = await postgresClient.createPasswordResetToken(
-        user.id,
-      );
-      const verificationLink = `${process.env.ADMIN_BASE_URL}/reset-password/${verificationToken}`;
-
-      await sendResetPasswordEmail(user.email, verificationLink, user.username);
-    } catch (error) {
-      console.log("reset password error", error);
+    const user = await postgresClient.ensureUserExistByUsernameOrEmail(
+      parsedData.usernameOrEmail,
+    );
+    if (!user) {
+      throw new AuthError("INVALID_EMAIL");
     }
+
+    const verificationToken = await postgresClient.createPasswordResetToken(
+      user.id,
+    );
+    const verificationLink = `${process.env.ADMIN_BASE_URL}/reset-password/${verificationToken}`;
+
+    await kafka.sendEmailVerificationCode({
+      toAddress: user.email,
+      code: verificationLink,
+      username: user.username
+    });
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {

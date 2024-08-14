@@ -14,7 +14,7 @@ const brokeNamesProd = ['kafka1', 'kafka2', 'kafka3']
 @Module({
   imports: [GreetingModule, PostModule, CurrencyModule, KafkaModule.register([
     {
-      name: 'HERO_SERVICE',
+      name: 'kafka_service',
       options: {
         client: {
           clientId: `kafka-client`,

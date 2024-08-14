@@ -13,13 +13,14 @@ import { postgresClient } from "@repo/database";
 import { AuthError, BadRequestError, handleError } from "@repo/lib";
 
 import { validateRequestRegular } from "~/src/auth/validateRequestRegular";
-import { sendEmailVerificationCode } from "../send-email/sendEmail";
+import { kafka } from "~/src/kafka/producer";
 
 export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestRegular();
 
   try {
 
+    const registerStart = performance.now();
     if (existingSession) {
       throw new BadRequestError("UNAUTHORIZED");
     }
@@ -60,14 +61,11 @@ export async function POST(request: Request) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }
 
-    const kafkaStart = performance.now();
-    const sentCode = await sendEmailVerificationCode(
-      parsedData.email,
-      verificationCode.code,
-      newUser.username,
-    );
-    const kafkaEnd = performance.now();
-    console.log('kafka takes', (kafkaEnd - kafkaStart) / 1000, 'seconds')
+    const sentCode = await kafka.sendEmailVerificationCode({
+      toAddress: parsedData.email,
+      code: verificationCode.code,
+      username: newUser.username
+    });
     if (!sentCode) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }
@@ -86,6 +84,9 @@ export async function POST(request: Request) {
       resendToken: "",
       success: true,
     };
+
+    const registerEnd = performance.now();
+    console.log('register takes', (registerEnd - registerStart) / 1000, 'seconds')
 
     return NextResponse.json(returnedloginData, { status: 201 });
   } catch (error) {

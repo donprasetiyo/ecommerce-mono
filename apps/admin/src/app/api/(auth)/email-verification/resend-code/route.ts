@@ -12,8 +12,7 @@ import {
   handleError,
   isWithinLastHours,
 } from "@repo/lib";
-
-import { sendEmailVerificationCode } from "../../send-email/sendEmail";
+import { kafka } from "@admin/kafka/producer";
 
 export async function POST(request: Request) {
   const { session: existingSession, user } = await validateRequestAdmin();
@@ -79,12 +78,11 @@ export async function POST(request: Request) {
     if (!verificationCode) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");
     }
-
-    const sentCode = await sendEmailVerificationCode(
-      verificationCode.email,
-      verificationCode.code,
-      user.username,
-    );
+    const sentCode = await kafka.sendEmailVerificationCode({
+      toAddress: verificationCode.email,
+      code: verificationCode.code,
+      username: user.username,
+    });
 
     if (!sentCode) {
       throw new AuthError("USER_CREATED_BUT_EMAIL_VERIFY_FAILED");

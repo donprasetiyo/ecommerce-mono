@@ -17,7 +17,7 @@ import {
 } from "@repo/lib";
 
 import { validateRequestRegular } from "~/src/auth/validateRequestRegular";
-import { sendEmailVerificationCode } from "../send-email/sendEmail";
+import { kafka } from "~/src/kafka/producer";
 
 export const POST = async (request: NextRequest) => {
   const { session: existingSession } = await validateRequestRegular();
@@ -104,11 +104,11 @@ export const POST = async (request: NextRequest) => {
         throw new AuthError("USER_LOGGED_IN_BUT_EMAIL_VERIFY_FAILED");
       }
 
-      const sentCode = await sendEmailVerificationCode(
-        user.email,
-        verificationCode.code,
-        user.username,
-      );
+      const sentCode = await kafka.sendEmailVerificationCode({
+        toAddress: user.email,
+        code: verificationCode.code,
+        username: user.username,
+      });
       if (!sentCode) {
         throw new AuthError("USER_LOGGED_IN_BUT_EMAIL_VERIFY_FAILED");
       }

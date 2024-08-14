@@ -8,8 +8,7 @@ import { validateRequestRegular } from "@web/auth/validateRequestRegular";
 
 import { postgresClient } from "@repo/database";
 import { AuthError, BadRequestError, handleError } from "@repo/lib";
-
-import { sendResetPasswordEmail } from "../send-email/sendEmail";
+import { kafka } from "~/src/kafka/producer";
 
 export async function POST(request: Request) {
   const { session: existingSession } = await validateRequestRegular();
@@ -36,7 +35,11 @@ export async function POST(request: Request) {
     );
     const verificationLink = `${process.env.WEB_BASE_URL}/reset-password/${verificationToken}`;
 
-    await sendResetPasswordEmail(user.email, verificationLink, user.username);
+    await kafka.sendEmailResetPassword({
+      toAddress: user.email,
+      code: verificationLink, 
+      username: user.username
+      });
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
